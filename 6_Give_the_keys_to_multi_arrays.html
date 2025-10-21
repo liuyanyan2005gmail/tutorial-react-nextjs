@@ -1,0 +1,51 @@
+<html>
+<body>
+<div id="app"></div>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<!-- Babel Script -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/jsx">
+    function CombinedItemList({ array1, array2 }) {
+        return (
+            <>
+                <h2>Items from array1:</h2>
+                <ul>
+                    {array1.map((item) => (
+                        <li key={`array1-${item.id}`}>{item.name}</li>
+                    ))}
+                </ul>
+                <h2>Items from array2:</h2>
+                <ul>
+                    {array2.map((item) => (
+                        <li key={`array2-${item.id}`}>{item.name}</li>
+                    ))}
+                </ul>
+            </>
+        );
+    }
+
+    function App() {
+        const array1 = [
+            { id: 1, name: "Item A" },
+            { id: 2, name: "Item B" },
+        ];
+
+        const array2 = [
+            { id: 3, name: "Item C" },
+            { id: 4, name: "Item D" },
+        ];
+
+        return (
+            <div>
+                <h1>Combined Item List</h1>
+                <CombinedItemList array1={array1} array2={array2} />
+            </div>
+        );
+    }
+
+    const root = ReactDOM.createRoot(app);
+    root.render(<App />);
+</script>
+</body>
+</html>

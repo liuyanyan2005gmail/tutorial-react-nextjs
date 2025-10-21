@@ -1,0 +1,84 @@
+<html>
+<body>
+<div id="app"></div>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<!-- Babel Script -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/jsx">
+    function MyForm() {
+        const [inputValue, setInputValue] = React.useState('');
+        const [isSubmitting, setIsSubmitting] = React.useState(false);
+        const [message, setMessage] = React.useState('');
+        const [error, setError] = React.useState('');
+
+        const handleInputChange = (e) => {
+            setInputValue(e.target.value);
+        };
+
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            setIsSubmitting(true);
+            setMessage(''); // Clear previous messages
+            setError(''); // Clear previous errors
+
+            // Simulate an API call
+            try {
+                await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        Math.random() > 0.5 ? resolve() : reject(new Error('Submission failed!'));
+                    }, 2000);
+                });
+                setMessage('Thank you for your submission!');
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setIsSubmitting(false);
+            }
+        };
+
+        // Effect to handle messages
+        React.useEffect(() => {
+            if (message) {
+                const timer = setTimeout(() => {
+                    setMessage(''); // Clear message after 3 seconds
+                }, 3000);
+
+                return () => clearTimeout(timer); // Cleanup on unmount
+            }
+        }, [message]); // Runs when message changes
+
+        React.useEffect(() => {
+            if (error) {
+                const timer = setTimeout(() => {
+                    setError(''); // Clear error after 3 seconds
+                }, 3000);
+
+                return () => clearTimeout(timer); // Cleanup on unmount
+            }
+        }, [error]); // Runs when error changes
+
+        return (
+            <div>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        placeholder="Type something..."
+                    />
+                    <button type="submit" disabled={!inputValue || isSubmitting}>
+                        {isSubmitting ? 'Submitting...' : 'Submit'}
+                    </button>
+                </form>
+                {message && <p style={{ color: 'green' }}>{message}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+            </div>
+        );
+    }
+
+    const root = ReactDOM.createRoot(app);
+    root.render(<MyForm />);
+</script>
+</body>
+</html>
